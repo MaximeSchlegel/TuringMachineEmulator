@@ -21,21 +21,21 @@ public class TuringMachine {
     private int currentState;  // current state of the turring machine (index in the list array
     private int currentIndex;  // current index of the reading head
 
-    private int accepted=-1;
+    private boolean ran, accepted;
     private boolean debug, display;
 
     public int getFinalState() throws TuringMachineException {
-        if (this.accepted==-1) throw new TuringMachineException("Try runnig the turing machine before accessing its final state");
+        if (! this.ran) throw new TuringMachineException("Try runnig the turing machine before accessing its final state");
         return this.currentState;
     }
 
     public boolean getAccepted() throws TuringMachineException {
-        if (this.accepted==-1) throw new TuringMachineException("Try runnig the turing machine before accessing its accepting state");
-        return this.accepted == 1;
+        if (! this.ran) throw new TuringMachineException("Try runnig the turing machine before accessing its accepting state");
+        return this.accepted;
     }
 
     private Triplet<Integer, Integer, direction> readToTransition(int read) {
-        // convert a state and read to an int
+        // return the transition link to the state, read couple
         return this.transitions.get(this.statesNb * read + this.currentState);
     } 
 
@@ -51,7 +51,7 @@ public class TuringMachine {
                 // cell do not exist, create it
                 this.tapeNegatives.add(0);
             }
-            return this.tapeNegatives.get(-this.currentIndex - 1); // account for 0 on positive tape and change of sign
+            return this.tapeNegatives.get(-this.currentIndex - 1);  // account for 0 on positive tape and change of sign
         }
     }
 
@@ -60,7 +60,7 @@ public class TuringMachine {
         if (this.currentIndex >= 0) {
             this.tapePositives.set(this.currentIndex, toWrite);
         } else {
-            this.tapeNegatives.set(-this.currentIndex - 1, toWrite);
+            this.tapeNegatives.set(-this.currentIndex - 1, toWrite);  // account for 0 on positive tape and change of sign
         }
     }
 
@@ -83,43 +83,42 @@ public class TuringMachine {
             System.out.println("  Step  |  Tape Pos  |  Transition");
         }
         
-        // iterate while it does not reach a final state
-        while((! this.statesAccepting.contains(this.currentState))
-              && (! this.statesRejecting.contains(this.currentState))) {
+        read = this.tapeRead();
+
+        // iterate while it does not reach a state where the transition si no define
+        while(this.transitions.containsKey(this.statesNb * read + this.currentState)) {
             
-                transitionDiplay = new StringBuilder("( " + this.currentState + " ; ");
-                is = this.currentState;
+            transitionDiplay = new StringBuilder("( " + this.currentState + " ; ");
+            transitionDiplay.append(read + " ) => ");
+
+            is = this.currentState;
+
+            transition = this.readToTransition(read);
+            this.currentState = transition.getFirst();
+            this.tapeWrite(transition.getSecond());
+            this.move(transition.getThird());
+            transitionDiplay.append(transition);
+
+            if (this.debug || this.display) System.out.printf("  %4d  |  %-+8d  |  %s\n", i, this.currentIndex, transitionDiplay.toString());
 
             read = this.tapeRead();
-            transitionDiplay.append(read + " ) => ");
-            
-            try {
-                transition = this.readToTransition(read);
-                this.currentState = transition.getFirst();
-                this.tapeWrite(transition.getSecond());
-                this.move(transition.getThird());
-                transitionDiplay.append(transition);
-
-                if (this.debug || this.display) System.out.printf("  %4d  |  %-+8d  |  %s\n", i, this.currentIndex, transitionDiplay.toString());
-
-            } catch (Exception e) {
-                System.out.printf("Can't find the transition for: (state: %d ;read: %d)\n", this.currentState, read);
-                System.out.printf("  Current Tape position: %d \n", this.currentIndex);
-                System.out.print(("    "));
-                for (i = -this.tapeNegatives.size(); i < this.tapePositives.size(); i++) 
-                    System.out.printf((i<0) ? " %+4d " : " %-+4d ", i);
-                System.out.print("\n    ");
-                for (i = -this.tapeNegatives.size(); i < this.tapePositives.size(); i++) 
-                    System.out.printf((i<0) ? " %3d  " : "  %-3d ", (i<0) ? this.tapeNegatives.get(-i - 1) : tapePositives.get(i));
-                System.out.println();
-                throw e;
-            }
-            
             i++;
-        } 
-        this.accepted = statesAccepting.contains(this.currentState) ? 1 : 0;
-        if(this.debug || this.display) System.out.println("Done\n");
+        }
+        if (this.debug || this.display) {
+            System.out.printf("Can't find the transition for: (state: %d ;read: %d)\n", this.currentState, read);
+            System.out.printf("  Current Tape position: %d \n", this.currentIndex);
+            System.out.print(("    "));
+            for (i = -this.tapeNegatives.size(); i < this.tapePositives.size(); i++) 
+                System.out.printf((i<0) ? " %+4d " : " %-+4d ", i);
+            System.out.print("\n    ");
+            for (i = -this.tapeNegatives.size(); i < this.tapePositives.size(); i++) 
+                System.out.printf((i<0) ? " %3d  " : "  %-3d ", (i<0) ? this.tapeNegatives.get(-i - 1) : tapePositives.get(i));
+            System.out.println();
+        }
 
+        this.ran = true;
+        this.accepted = statesAccepting.contains(this.currentState);
+        if(this.debug || this.display) System.out.println("Done\n");
     }
 
     private void parseTape (Scanner tapeReader) throws InvalidTapeFileException {
@@ -226,6 +225,8 @@ public class TuringMachine {
         this.currentIndex = 0;
         this.debug = debug;
         this.display = display;
+        this.ran = false;
+        this.accepted = false;
 
         if (this.debug) System.out.println("Successfully initialized");
 
