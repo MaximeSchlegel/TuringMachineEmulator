@@ -11,7 +11,6 @@ public class TuringMachine {
 
     private int statesNb;  // number of state, represent the list of state (s0 ... s_nbState-1)
     private ArrayList<Integer> statesAccepting;  // list of the final state of the turring machine, stop when reaching one
-    private ArrayList<Integer> statesRejecting;  // list of the final state of the turring machine, stop when reaching one
 
     private ArrayList<Integer> tapePositives;  // tape for the positvite indexes (include 0)
     private ArrayList<Integer> tapeNegatives;  // tape for the negative indexes (exclude 0)
@@ -207,7 +206,6 @@ public class TuringMachine {
         // Init
         this.statesNb = 0;
         this.statesAccepting = new ArrayList<>();
-        this.statesRejecting = new ArrayList<>();
         this.tapePositives = new ArrayList<>();
         this.tapeNegatives = new ArrayList<>();
         this.transitions = new HashMap<>();
