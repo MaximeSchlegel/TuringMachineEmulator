@@ -1,6 +1,5 @@
 state_number:6;
 accepting_states:5;
-rejecting_states:4;
 transitions:
 (0,0):(4,0,RIGHT);
 (0,1):(1,3,RIGHT);

@@ -170,19 +170,9 @@ public class TuringMachine {
 
         line = configReader.nextLine();
         lineSplited = line.split(":|;");        
-        // check the format of line three, expect: "rejecting_states:/int/,/int/,...,/int/;"
-        if (! (lineSplited.length == 2)) throw new InvalidConfigFileException("Line 3 is invalid: Wrong Number of token");
-        if (! lineSplited[0].equals("rejecting_states")) throw new InvalidConfigFileException("Line 3 is invalid: Wrong field");
-        
-        states = lineSplited[1].split(",");
-        for (String i : states) this.statesRejecting.add(Integer.parseInt(i));
-
-
-        line = configReader.nextLine();
-        lineSplited = line.split(":|;");        
         // check the format of line four, expect: "transitions:"
-        if (! (lineSplited.length == 1)) throw new InvalidConfigFileException("Line 4 is invalid: Wrong Number of token");
-        if (! lineSplited[0].equals("transitions")) throw new InvalidConfigFileException("Line 4 is invalid: Wrong field");
+        if (! (lineSplited.length == 1)) throw new InvalidConfigFileException("Line 3 is invalid: Wrong Number of token");
+        if (! lineSplited[0].equals("transitions")) throw new InvalidConfigFileException("Line 3 is invalid: Wrong field");
         
         int is, ns, r, w, i = 0;
         String[] initialState, finalState;
@@ -191,13 +181,13 @@ public class TuringMachine {
             line = configReader.nextLine();
             lineSplited = line.split(":|;");
             // read the transitions for the turing machine, format expected: (/state/,/read/):(/nextState/,/write/,RIGHT/LEFT);
-            if (! (lineSplited.length == 2)) throw new InvalidConfigFileException("Line " + (i+5) + " is invalid: Wrong Number of token");
+            if (! (lineSplited.length == 2)) throw new InvalidConfigFileException("Line " + (i+4) + " is invalid: Wrong Number of token");
             
             initialState = lineSplited[0].split(",");
-            if (! (initialState.length == 2)) throw new InvalidConfigFileException("Line " + (i+5) + " is invalid: Inavlid transition start");
+            if (! (initialState.length == 2)) throw new InvalidConfigFileException("Line " + (i+4) + " is invalid: Inavlid transition start");
             
             finalState = lineSplited[1].split(",|;");
-            if (! (finalState.length == 3)) throw new InvalidConfigFileException("Line " + (i+5) + " is invalid: Inavlid transition end");
+            if (! (finalState.length == 3)) throw new InvalidConfigFileException("Line " + (i+4) + " is invalid: Inavlid transition end");
             
             is = Integer.parseInt(initialState[0].substring(1,initialState[0].length()));  // remove the initial parenthesis
             r = Integer.parseInt(initialState[1].substring(0,initialState[1].length() - 1));  // remove the final parenthesis
