@@ -28,7 +28,7 @@ public class Main {
                     break;
                 case "-h":
                     System.out.println(help);
-                    break;
+                    return;
                 default:
                     System.err.println(help);
                     throw new IllegalArgumentException("Not a valid argument: " + args[i]);
