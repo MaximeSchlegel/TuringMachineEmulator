@@ -12,3 +12,7 @@
 
 - pass -debug to activate log
 - pass -display to see the execution
+
+TO DO: 
+- remove rejecting state: stop on no transitino available
+- pass accepted to bool and a ran
