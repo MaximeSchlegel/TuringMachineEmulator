@@ -42,3 +42,12 @@ Une iétration de la machine éffectue les actions suivantes:
 - Deplacement de la tête de lecture
 
 La compléxité d'une telle machine est déterminé par le programe qui est chargé lors du lancement.
+
+## Exemple
+
+- __Mot trié__: determine si les caractères d'un mot sont trié (implémentation du TD3)
+- __Xk Yk__:  :determine si un mots est de la forme $X^{k}Y^{k}$
+- __Add One__: ajoute 1 à un chiffre en binaire /!\ Pour prendre en compte le caratère vide $\epsilon$ il faut effectuer la transformation suivante sur le codage binaire:
+  - 0 -> 1
+  - 1 -> 2
+(0 est le premier caractère de l'alphabet et 1 le second)
