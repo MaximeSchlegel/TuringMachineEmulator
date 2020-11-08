@@ -2,7 +2,7 @@
 
 ## Utilisation
 
-L'émulateur se lance par la comande (après compilation)
+L'émulateur se lance (après compilation) par la commande 
 ```shell
 java Main -machine /path/ [-tape /path/] [-display] [-debug]
 ```
@@ -20,33 +20,33 @@ Usage: The program expect the following arguments:
 ## Fonctionnement
 
 L'émulateur de machine de turing charge la machine à émuler depuis un fichier texte.
-3 parametres sonts obligatoires:
+3 parametres sont obligatoires:
 - state_number: il represente le nombre d'état qu'aura notre machine de turing. (par exemple pour 3, la machine attendra des états parmis s0, s1, s2)
-- accepting_states: il donne les états finaux dans lesquels on peut considerer que le mot d'entré est acepté
-- transtions: indique à l'émulateur les transition de la machine
+- accepting_states: il donne les états finaux dans lesquels on peut considerer que le mot d'entré est accepté
+- transtions: indique à l'émulateur les transitions de la machine
 
 Un parametre optionel peut être fournit:
-- tape_offset: il permet de déplacer la tête de lecture sur avant de débuter l'excution. Cela peut permetre positionner la tête de lecture au milieux d'un mot.
+- tape_offset: il permet de déplacer la tête de lecture avant de débuter l'excution de la machine. Cela peut permetre positionner la tête de lecture au milieu d'un mot.
 
 L'emulateur peut aussi prendre en entré un mot sous la forme d'un fichier texte.
 Ce dernier sera alors positionné à partir de la position 0 sur le ruban positif.
-Sur le ruban (et dans les transition) le caractere 0 fait office de mot vide, un ruban vide sera alors une suite infinie de 0. Il faut tenir compte de cela lors de l'écriture des programmes et rubans.
+Sur le ruban (et dans les transitions) le caractere 0 fait office de mot vide, par exemple un ruban vide sera une suite infinie de 0. Il faut tenir compte de cela lors de l'écriture des programmes et rubans.
 
-Une fois les parametres chargés, la machine de turing s'éxcutera jusqu'à ce quelle rencontre un etat et une valeur pour lesquels aucune transition n'a été definie. Elle s'arretera alors est acceptera (ou rejetera) le mot en fonction de son état courant.
+Une fois les parametres chargés, la machine de turing s'éxcutera jusqu'à ce qu'elle rencontre un etat et une valeur pour lesquels aucune transition n'a été definie. Elle s'arretera alors est acceptera (ou rejetera) le mot en fonction de son état courant.
 
-Une iétration de la machine éffectue les actions suivantes:
+Une itération de la machine éffectue les actions suivantes:
 - Lecture de la case courante
 - Calcul de la transition grâce à l'état courant et le caractere lu
-- Changement de l'état de lq machine
+- Changement de l'état de la machine
 - Ecriture du caratere requis par la tansition
 - Deplacement de la tête de lecture
 
 La compléxité d'une telle machine est déterminé par le programe qui est chargé lors du lancement.
 
-## Exemple
+## Exemples
 
-- __Mot trié__: determine si les caractères d'un mot sont trié (implémentation du TD3)
-- __Xk Yk__:  :determine si un mots est de la forme $X^{k}Y^{k}$
+- __Mot trié__: determine si les caractères d'un mot sont triés (implémentation du TD3)
+- __Xk Yk__:  :determine si un mots est de la forme $X^{k}Y^{k}$ (implémentation du TD3)
 - __Add One__: ajoute 1 à un chiffre en binaire /!\ Pour prendre en compte le caratère vide $\epsilon$ il faut effectuer la transformation suivante sur le codage binaire:
   - 0 -> 1
   - 1 -> 2
