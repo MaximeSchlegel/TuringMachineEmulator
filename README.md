@@ -30,8 +30,9 @@ Un parametre optionel peut être fournit:
 
 L'emulateur peut aussi prendre en entré un mot sous la forme d'un fichier texte.
 Ce dernier sera alors positionné à partir de la position 0 sur le ruban positif.
+Sur le ruban (et dans les transition) le caractere 0 fait office de mot vide, un ruban vide sera alors une suite infinie de 0. Il faut tenir compte de cela lors de l'écriture des programmes et rubans.
 
-Une fois les parametres chargés, la machine de turing s'éxcutera jusqu'à ce quelle rencontre un etat et une valeur pour lesquels aucune transition n'a été definie. Elle s'arretera alors est acceptera le mot en fonction de son état courant.
+Une fois les parametres chargés, la machine de turing s'éxcutera jusqu'à ce quelle rencontre un etat et une valeur pour lesquels aucune transition n'a été definie. Elle s'arretera alors est acceptera (ou rejetera) le mot en fonction de son état courant.
 
 Une iétration de la machine éffectue les actions suivantes:
 - Lecture de la case courante
