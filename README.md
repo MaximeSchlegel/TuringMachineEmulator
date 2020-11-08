@@ -32,3 +32,12 @@ L'emulateur peut aussi prendre en entré un mot sous la forme d'un fichier texte
 Ce dernier sera alors positionné à partir de la position 0 sur le ruban positif.
 
 Une fois les parametres chargés, la machine de turing s'éxcutera jusqu'à ce quelle rencontre un etat et une valeur pour lesquels aucune transition n'a été definie. Elle s'arretera alors est acceptera le mot en fonction de son état courant.
+
+Une iétration de la machine éffectue les actions suivantes:
+- Lecture de la case courante
+- Calcul de la transition grâce à l'état courant et le caractere lu
+- Changement de l'état de lq machine
+- Ecriture du caratere requis par la tansition
+- Deplacement de la tête de lecture
+
+La compléxité d'une telle machine est déterminé par le programe qui est chargé lors du lancement.
