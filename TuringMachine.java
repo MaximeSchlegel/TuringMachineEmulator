@@ -77,7 +77,7 @@ public class TuringMachine {
     }
 
     public void execute() {
-        int read, i = 0, is;
+        int read, i = 0;
         Triplet<Integer, Integer, direction> transition;
         StringBuilder transitionDiplay;
 
@@ -93,20 +93,19 @@ public class TuringMachine {
         // current value
         while (this.transitions.containsKey(this.statesNb * read + this.currentState)) {
 
-            is = this.currentState;
-
             transition = this.readToTransition(read); // get the transition for the current (state, read)
-            this.currentState = transition.getFirst(); // update the state of the machine
-            this.tapeWrite(transition.getSecond()); // write on the tape
-            this.move(transition.getThird()); // move the reading head
-
+            
             if (this.debug || this.display) {
                 // Display the transition
-                transitionDiplay = new StringBuilder("( " + is + " ; ");
+                transitionDiplay = new StringBuilder("( " + this.currentState + " ; ");
                 transitionDiplay.append(read + " ) => ");
                 transitionDiplay.append(transition);
                 System.out.printf("  %4d  |  %-+8d  |  %s\n", (i++), this.currentIndex, transitionDiplay.toString());
             }
+
+            this.currentState = transition.getFirst(); // update the state of the machine
+            this.tapeWrite(transition.getSecond()); // write on the tape
+            this.move(transition.getThird()); // move the reading head
 
             read = this.tapeRead(); // read the new cell
         }
@@ -132,8 +131,8 @@ public class TuringMachine {
 
     private void parseTape(Scanner tapeReader) throws InvalidTapeFileException {
         // parse the tape file to initialize the machine.
-        // format expected: /int;/int/;.../int/
-        // cell nb : 0 1 n-1
+        // format expected: /int;/int/;...;/int/
+        //        cell nb :   0    1        n-1
 
         if (!tapeReader.hasNextLine())
             throw new InvalidTapeFileException("File is empty");
@@ -154,7 +153,7 @@ public class TuringMachine {
         }
 
         while (i < lineSplit.length && i < lineSplit.length) {
-            // after the end of the pregenerated tape, just append the value
+            // after the end of the pregenerated tape (by the offset), just append the value
             try {
                 toAdd = Integer.parseInt(lineSplit[i]);
                 this.tapePositives.add(toAdd);
@@ -246,7 +245,7 @@ public class TuringMachine {
                         if (! (lineSplited.length == 1)) throw new InvalidConfigFileException("Line " + i + " is invalid:\n"
                                                                                             + "      read: " + line + "\n"
                                                                                             + "    expect: transitions:\n");
-                        intransitions = true;
+                        intransitions = true; // we are ready to parse transition
                         params++;
                         break;
                     default:
@@ -256,8 +255,8 @@ public class TuringMachine {
             }
         }
 
+        // they are 3 mandatory parameters so we check if we have parsed all of them
         if (params != 3) throw new InvalidConfigFileException("Wrong number of parameters");
-        
     }
 
     public TuringMachine(String configPath, String tapePath, boolean display, boolean debug)
@@ -288,7 +287,7 @@ public class TuringMachine {
 
             if (this.debug)
                 System.out.println("Turing Machine config file: " + configFile);
-
+            
             try {
                 this.parseConfig(configReader);
                 if (this.debug)
@@ -298,6 +297,7 @@ public class TuringMachine {
                 throw e;
             }
 
+            configReader.close();
         }
 
         if (!tapePath.isEmpty()) {
@@ -316,6 +316,7 @@ public class TuringMachine {
                 throw e;
             }
 
+            tapeReader.close();
         }
 
         if (this.debug)
