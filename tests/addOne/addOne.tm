@@ -1,0 +1,9 @@
+state_number:3;
+accepting_states:2;
+transitions:
+(0,0):(1,0,LEFT)
+(0,1):(0,1,RIGHT)
+(0,2):(0,2,RIGHT)
+(1,0):(2,2,LEFT)
+(1,1):(2,2,LEFT)
+(1,2):(1,1,LEFT);
